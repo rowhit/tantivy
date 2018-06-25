@@ -68,9 +68,11 @@ impl SegmentRegister {
         segment_ids
     }
 
+    #[cfg(test)]
     pub fn segment_entry(&self, segment_id: &SegmentId) -> Option<SegmentEntry> {
         self.segment_states.get(segment_id).cloned()
     }
+
 
     pub fn contains_all(&mut self, segment_ids: &[SegmentId]) -> bool {
         segment_ids
@@ -94,11 +96,14 @@ impl SegmentRegister {
             .cancel_merge();
     }
 
-    pub fn start_merge(&mut self, segment_id: &SegmentId) {
-        self.segment_states
-            .get_mut(segment_id)
-            .expect("Received a merge notification for a segment that is not registered")
-            .start_merge();
+
+    pub fn start_merge(&mut self, segment_id: &SegmentId) -> Option<SegmentEntry> {
+        if let Some(segment_entry) = self.segment_states.get_mut(segment_id) {
+            segment_entry.start_merge();
+            Some(segment_entry.clone())
+        } else {
+            None
+        }
     }
 
     pub fn new(segment_metas: Vec<SegmentMeta>, delete_cursor: &DeleteCursor) -> SegmentRegister {
