@@ -24,29 +24,30 @@ addons:
       - libelf-dev
       - libdw-dev
       - binutils-dev
+      - cmake
 
 matrix:
   include:
     # Android
-    - env: TARGET=aarch64-linux-android DISABLE_TESTS=1
-    - env: TARGET=arm-linux-androideabi DISABLE_TESTS=1
-    - env: TARGET=armv7-linux-androideabi DISABLE_TESTS=1
-    - env: TARGET=i686-linux-android DISABLE_TESTS=1
-    - env: TARGET=x86_64-linux-android DISABLE_TESTS=1
+    #- env: TARGET=aarch64-linux-android DISABLE_TESTS=1
+    #- env: TARGET=arm-linux-androideabi DISABLE_TESTS=1
+    #- env: TARGET=armv7-linux-androideabi DISABLE_TESTS=1
+    #- env: TARGET=i686-linux-android DISABLE_TESTS=1
+    #- env: TARGET=x86_64-linux-android DISABLE_TESTS=1
 
     # iOS
-    - env: TARGET=x86_64-apple-ios DISABLE_TESTS=1
-      os: osx
+    #- env: TARGET=x86_64-apple-ios DISABLE_TESTS=1
+    #  os: osx
 
     # Linux
-    - env: TARGET=aarch64-unknown-linux-gnu
-    - env: TARGET=i686-unknown-linux-gnu
-    - env: TARGET=x86_64-unknown-linux-gnu
-    - env: TARGET=x86_64-unknown-linux-musl
+    #- env: TARGET=aarch64-unknown-linux-gnu
+    #- env: TARGET=i686-unknown-linux-gnu
+    #- env: TARGET=x86_64-unknown-linux-gnu
+    #- env: TARGET=x86_64-unknown-linux-musl
 
     # OSX
-    - env: TARGET=x86_64-apple-darwin
-      os: osx
+    #- env: TARGET=x86_64-apple-darwin
+    #  os: osx
 
 before_install:
   - set -e
@@ -61,8 +62,13 @@ before_script:
   - cargo install cargo-update || echo "cargo-update already installed"
   - cargo install cargo-travis || echo "cargo-travis already installed"
 
+#script:
+#  - bash ci/script.sh
 script:
-  - bash ci/script.sh
+  - |
+    cargo build --verbose &&
+    cargo coverage --verbose &&
+    bash <(curl -s https://codecov.io/bash) -s target/kcov
 
 after_script: set +e
   - cargo coveralls --exclude-pattern src/functional_test.rs
