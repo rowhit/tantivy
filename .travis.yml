@@ -29,15 +29,15 @@ addons:
 matrix:
   include:
     # Android
-    #- env: TARGET=aarch64-linux-android DISABLE_TESTS=1
-    #- env: TARGET=arm-linux-androideabi DISABLE_TESTS=1
-    #- env: TARGET=armv7-linux-androideabi DISABLE_TESTS=1
+    - env: TARGET=aarch64-linux-android DISABLE_TESTS=1
+    - env: TARGET=arm-linux-androideabi DISABLE_TESTS=1
+    - env: TARGET=armv7-linux-androideabi DISABLE_TESTS=1
     #- env: TARGET=i686-linux-android DISABLE_TESTS=1
-    #- env: TARGET=x86_64-linux-android DISABLE_TESTS=1
+    - env: TARGET=x86_64-linux-android DISABLE_TESTS=1
 
     # iOS
-    #- env: TARGET=x86_64-apple-ios DISABLE_TESTS=1
-    #  os: osx
+    - env: TARGET=x86_64-apple-ios DISABLE_TESTS=1
+      os: osx
 
     # Linux
     #- env: TARGET=aarch64-unknown-linux-gnu
@@ -65,6 +65,7 @@ before_script:
 #script:
 #  - bash ci/script.sh
 script:
+  - bash ci/script.sh
   - |
     cargo build --verbose &&
     cargo coverage --verbose &&
