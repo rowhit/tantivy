@@ -206,6 +206,8 @@ pub mod schema;
 pub mod store;
 pub mod termdict;
 
+mod snippet;
+
 mod docset;
 pub use self::docset::{DocSet, SkipResult};
 
